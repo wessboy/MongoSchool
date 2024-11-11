@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Persistance.DataBaseConfig;
 using Persistance.Entities;
 using Persistance.Interfaces;
 using Persistance.ValueObjects;
@@ -10,10 +11,13 @@ namespace Persistance.Repositories;
      public class StudentRepository : IStudentService
     {
     private readonly IMongoCollection<Student> _studentCollection;
-        public StudentRepository(IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,IMongoClient client)
+    private readonly MongoDbContext _mongoDbContext;
+        public StudentRepository(IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,MongoDbContext mongoDbContext)
         {
-          var database = client.GetDatabase(schoolDatabaseSettings.Value.DatabaseName);
-        _studentCollection = database.GetCollection<Student>(schoolDatabaseSettings.Value.StudentCollectionName);
+        
+            _mongoDbContext = mongoDbContext;
+            _studentCollection = _mongoDbContext.setCollection<Student>(schoolDatabaseSettings.Value.StudentCollectionName);
+          
         }
 
     public async Task<Student?> Create(Student student)

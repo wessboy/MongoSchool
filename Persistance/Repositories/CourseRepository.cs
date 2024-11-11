@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Persistance.DataBaseConfig;
 using Persistance.Entities;
 using Persistance.Interfaces;
 using Persistance.ValueObjects;
@@ -13,11 +14,13 @@ using System.Threading.Tasks;
 namespace Persistance.Repositories;
      public class CourseRepository : ICourseService
     {
-        private readonly IMongoCollection<Course> _courseCollection;    
-        public CourseRepository(IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,IMongoClient client)
+        private readonly IMongoCollection<Course> _courseCollection; 
+        private readonly MongoDbContext _mongoDbContext;
+        public CourseRepository(IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,IMongoClient client,MongoDbContext mongoDbContext)
         {
             var database = client.GetDatabase(schoolDatabaseSettings.Value.DatabaseName);
-            _courseCollection = database.GetCollection<Course>(schoolDatabaseSettings.Value.CoursesCollectionName);
+             _mongoDbContext = mongoDbContext;
+            _courseCollection = _mongoDbContext.setCollection<Course>(schoolDatabaseSettings.Value.CoursesCollectionName);
         }
 
     public async Task<Course?> Create(Course course)

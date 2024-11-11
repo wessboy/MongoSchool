@@ -24,6 +24,16 @@ builder.Services.AddSingleton<IMongoClient>(_ =>
     return new MongoClient(connectionString);   
 });
 
+builder.Services.AddScoped<MongoDbContext>(serviceProvider => 
+{ 
+   var client = serviceProvider.GetRequiredService<IMongoClient>();
+   var schooldbSetting = serviceProvider.GetRequiredService<SchoolDatabaseSettings>();
+    var database = client.GetDatabase(schooldbSetting.DatabaseName);
+    
+
+    return new MongoDbContext(database);    
+});
+
 /*builder.Services.Configure<HostOptions>(options =>
 {
     options.ServicesStartConcurrently = true;
