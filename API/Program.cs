@@ -1,4 +1,5 @@
 using API.Middelwares;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MonitorWorker;
 using Persistance.DataBaseConfig;
@@ -27,8 +28,8 @@ builder.Services.AddSingleton<IMongoClient>(_ =>
 builder.Services.AddScoped<MongoDbContext>(serviceProvider => 
 { 
    var client = serviceProvider.GetRequiredService<IMongoClient>();
-   var schooldbSetting = serviceProvider.GetRequiredService<SchoolDatabaseSettings>();
-    var database = client.GetDatabase(schooldbSetting.DatabaseName);
+   var schooldbSetting = serviceProvider.GetService<IOptions<SchoolDatabaseSettings>>()?.Value;
+    var database = client.GetDatabase(schooldbSetting?.DatabaseName);
     
 
     return new MongoDbContext(database);    
