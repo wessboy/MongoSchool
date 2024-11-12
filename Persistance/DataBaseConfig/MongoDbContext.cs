@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Persistance.Entities;
 using System;
@@ -20,10 +22,11 @@ namespace Persistance.DataBaseConfig
             BsonClassMap.RegisterClassMap<Student>(cm =>
             {
                 cm.AutoMap();
-                cm.MapIdField(st => st.Id).SetSerializer(new MongoDB.Bson.Serialization.Serializers.ObjectIdSerializer());
+                cm.MapIdMember(st => st.Id).SetSerializer(new ObjectIdStringSerializer());
                 cm.MapField(st => st.FirstName).SetIsRequired(true);
                 cm.MapField(st => st.LastName).SetIsRequired(true);
                 cm.MapField(st => st.Major);
+                
 
             });
         }

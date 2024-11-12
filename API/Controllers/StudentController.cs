@@ -70,6 +70,8 @@ public class StudentController : ControllerBase
 
 
         var result = await _studentService.Update(id,updatedstudent);
+
+       string newid = (string)result.UpsertedId;
        
         return result.IsAcknowledged ?  NoContent() : UnprocessableEntity("Update Operation Failed");
     }

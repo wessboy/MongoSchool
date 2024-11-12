@@ -29,7 +29,7 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
 { 
    var client = serviceProvider.GetRequiredService<IMongoClient>();
    var schooldbSetting = serviceProvider.GetService<IOptions<SchoolDatabaseSettings>>()?.Value;
-    var database = client.GetDatabase(schooldbSetting?.DatabaseName);
+   var database = client.GetDatabase(schooldbSetting?.DatabaseName);
     
 
     return new MongoDbContext(database);    
