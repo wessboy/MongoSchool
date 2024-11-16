@@ -13,6 +13,7 @@
 	
 
 	<ItemGroup>
+    <ProjectReference Include="..\ExternalSerivces\ExternalSerivces.csproj" />
     <ProjectReference Include="..\MonitorWorker\MonitorWorker.csproj" />
     <ProjectReference Include="..\Persistance\Persistance.csproj" />
   </ItemGroup>

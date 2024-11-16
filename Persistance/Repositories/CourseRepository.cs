@@ -5,11 +5,7 @@ using Persistance.DataBaseConfig;
 using Persistance.Entities;
 using Persistance.Interfaces;
 using Persistance.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Persistance.Repositories;
      public class CourseRepository : ICourseService
