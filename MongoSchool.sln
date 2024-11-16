@@ -11,11 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitorWorker", "MonitorWor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalSerivces", "ExternalSerivces\ExternalSerivces.csproj", "{BB0DE5AD-F779-4347-878D-4D0F64165272}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logs", "logs", "{021276E3-7467-4B83-9EEB-14FBEB197DA1}"
-	ProjectSection(SolutionItems) = preProject
-		internallog.txt = internallog.txt
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
