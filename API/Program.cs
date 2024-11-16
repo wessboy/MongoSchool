@@ -1,4 +1,5 @@
 using API.Middelwares;
+using ExternalSerivces.ServicesConfiguration;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MonitorWorker;
@@ -10,7 +11,7 @@ using Persistance.ValueObjects;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddExternalServices();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

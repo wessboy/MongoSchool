@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExternalSerivces.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Persistance.Entities;
 using Persistance.Interfaces;
 
@@ -10,8 +11,8 @@ public class StudentController : ControllerBase
 {
 
     private readonly IStudentService _studentService;
-    private readonly ILogger<StudentController> _logger;    
-    public StudentController(IStudentService studentService, ILogger<StudentController> logger)
+    private readonly ILoggerService _logger;    
+    public StudentController(IStudentService studentService, ILoggerService logger)
     {
         _studentService = studentService;
         _logger = logger;
