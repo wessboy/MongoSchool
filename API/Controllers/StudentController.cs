@@ -31,7 +31,7 @@ public class StudentController : ControllerBase
     }
 
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet("/{id:length(24)}")]
     public async Task<ActionResult<Student>> GetOne(string id)
     {
         if (string.IsNullOrEmpty(id)) return BadRequest("Invalid Id !!");
@@ -59,7 +59,7 @@ public class StudentController : ControllerBase
         return CreatedAtAction(nameof(GetOne), new { id = newStudent?.Id }, newStudent);
     }
 
-    [HttpPut]
+    [HttpPut("{id:length(24)}")]
     public async Task<ActionResult> Update(string id,Student updatedstudent)
     {
         if(string.IsNullOrEmpty(id) || updatedstudent is null) return BadRequest("Invalid Data Entry !!");
@@ -71,9 +71,12 @@ public class StudentController : ControllerBase
 
         var result = await _studentService.Update(id,updatedstudent);
 
-       string newid = (string)result.UpsertedId;
+        if (result.IsAcknowledged)
+        {
+            return Ok($"student Id : {result.UpsertedId}");
+        }
        
-        return result.IsAcknowledged ?  NoContent() : UnprocessableEntity("Update Operation Failed");
+        return UnprocessableEntity("Update Operation Failed");
     }
 
     [HttpDelete("{id:length(24)}")]

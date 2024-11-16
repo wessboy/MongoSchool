@@ -26,6 +26,7 @@ namespace Persistance.Repositories;
         await _studentCollection.InsertOneAsync(student);   
 
         return student;
+
     }
 
     public async Task<DeleteResult> Delete(string id)
@@ -51,7 +52,7 @@ namespace Persistance.Repositories;
     public async Task<ReplaceOneResult> Update(string id, Student student)
     {
         student.Id = id;
-
+       
         return await _studentCollection.ReplaceOneAsync(s => s.Id == id, student);
     }
 }
