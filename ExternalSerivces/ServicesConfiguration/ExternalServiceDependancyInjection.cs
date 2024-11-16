@@ -1,14 +1,8 @@
 ﻿using ExternalSerivces.Interfaces;
 using ExternalSerivces.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ExternalSerivces.ServicesConfiguration;
      public static class ExternalServiceDependancyInjection
@@ -16,7 +10,9 @@ namespace ExternalSerivces.ServicesConfiguration;
        
          public static IServiceCollection AddExternalServices(this IServiceCollection services)
         {
-            string filePath = string.Concat("C:/Users/hedhi/Desktop/TrialProjects/MongoSchool/ExternalSerivces", "/nlog.config");
+            string directoryPath = "C:/Users/hedhi/Desktop/TrialProjects/MongoSchool/ExternalSerivces/ServicesConfiguration";
+
+            string filePath = string.Concat(directoryPath,"/nlog.config");
 
           
             LogManager.Setup().LoadConfigurationFromFile(filePath);
