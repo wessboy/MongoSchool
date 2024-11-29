@@ -19,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<SchoolDatabaseSettings>(builder.Configuration.GetSection("SchoolDatabaseSettings"));
 builder.Services.AddScoped<IStudentService,StudentRepository>();
 builder.Services.AddScoped<ICourseService,CourseRepository>();
+builder.Services.AddSingleton<IAdminstrationService,AdminstrationService>();
+
 builder.Services.AddSingleton<IMongoClient>(_ =>
 {
     var connectionString = builder.Configuration.GetSection("SchoolDatabaseSettings:ConnectionString").Value;
@@ -42,8 +44,8 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
     options.ServicesStopConcurrently = true;
 });*/
 
-builder.Services.AddSingleton<IMongoDbChangeStreamService,MongoDbChangeStreamService>();
-builder.Services.AddHostedService<DatabseEventStreamWorker>();
+//builder.Services.AddSingleton<IMongoDbChangeStreamService,MongoDbChangeStreamService>();
+//builder.Services.AddHostedService<DatabseEventStreamWorker>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,6 +60,25 @@ app.ConfigureCustomExceptionMiddelware();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseWhen(context => context.Request.Path == "/api/student/add", builder =>
+{
+    builder.Use(async(context,next) =>
+    {
+        using var scope = builder.ApplicationServices.CreateScope();
+        var administrationService = scope.ServiceProvider.GetRequiredService<IAdminstrationService>();
+        var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>(); 
+      
+
+      
+       administrationService.SubscribeToNewStudentEvent(studentService);
+        
+        await next();
+
+       administrationService?.UnsubscribeToNewStudentEvent(studentService);
+    });
+});
+//custom middelware
 
 app.MapControllers();
 

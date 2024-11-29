@@ -23,7 +23,9 @@ namespace Persistance.Repositories;
     public async Task<Student?> Create(Student student)
     {
        student.Id = ObjectId.GenerateNewId().ToString();
-        await _studentCollection.InsertOneAsync(student);   
+        await _studentCollection.InsertOneAsync(student);
+
+        OnNewStudentAdded(student.FirstName, student.LastName, student.Major);
 
         return student;
 
@@ -55,5 +57,16 @@ namespace Persistance.Repositories;
        
         return await _studentCollection.ReplaceOneAsync(s => s.Id == id, student);
     }
+
+
+    #region  events
+
+    public event EventHandler<OnNewStudentAddedEventArgs>? OnNewStudentAddedHandler;
+    protected virtual void OnNewStudentAdded(string firstName, string lastName,string major)
+    {
+        OnNewStudentAddedHandler?.Invoke(this, new OnNewStudentAddedEventArgs(firstName, lastName, major));
+    }
+
+    #endregion
 }
 

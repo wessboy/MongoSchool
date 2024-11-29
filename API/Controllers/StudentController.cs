@@ -44,7 +44,7 @@ public class StudentController : ControllerBase
         return studentFromDb is null ? NotFound($"No Student with id:{id}  exists") : Ok(studentFromDb);
     }
 
-    [HttpPost]
+    [HttpPost("add")]
     public async Task<ActionResult> Create(Student student)
     {
         if (student is null) return BadRequest("Invalid Data Entery !!");
