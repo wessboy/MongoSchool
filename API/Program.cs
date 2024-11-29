@@ -38,6 +38,8 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
     return new MongoDbContext(database);    
 });
 
+//hosting
+builder.Services.AddHostedService
 /*builder.Services.Configure<HostOptions>(options =>
 {
     options.ServicesStartConcurrently = true;
@@ -49,11 +51,10 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.ConfigureCustomExceptionMiddelware();
 
