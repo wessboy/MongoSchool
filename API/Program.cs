@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MonitorWorker;
 using Persistance.DataBaseConfig;
+using Persistance.Entities;
 using Persistance.Interfaces;
 using Persistance.Repositories;
 using Persistance.ValueObjects;
@@ -38,8 +39,9 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
     return new MongoDbContext(database);    
 });
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<OnNewStudentAddedCommand>());
+
 //hosting
-builder.Services.AddHostedService
 /*builder.Services.Configure<HostOptions>(options =>
 {
     options.ServicesStartConcurrently = true;
@@ -50,11 +52,9 @@ builder.Services.AddHostedService
 //builder.Services.AddHostedService<DatabseEventStreamWorker>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
+
     app.UseSwagger();
     app.UseSwaggerUI();
-
 
 app.ConfigureCustomExceptionMiddelware();
 
@@ -62,23 +62,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseWhen(context => context.Request.Path == "/api/student/add", builder =>
-{
-    builder.Use(async(context,next) =>
-    {
-        using var scope = builder.ApplicationServices.CreateScope();
-        var administrationService = scope.ServiceProvider.GetRequiredService<IAdminstrationService>();
-        var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>(); 
-      
-
-      
-       administrationService.SubscribeToNewStudentEvent(studentService);
-        
-        await next();
-
-       administrationService?.UnsubscribeToNewStudentEvent(studentService);
-    });
-});
 //custom middelware
 
 app.MapControllers();

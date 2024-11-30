@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Persistance.DataBaseConfig;
@@ -12,9 +14,14 @@ namespace Persistance.Repositories;
     {
     private readonly IMongoCollection<Student> _studentCollection;
     private readonly MongoDbContext _mongoDbContext;
-        public StudentRepository(IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,MongoDbContext mongoDbContext)
+    private readonly IMediator _mediator;
+        public StudentRepository(
+            IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,
+            MongoDbContext mongoDbContext,
+            IMediator mediator
+            )
         {
-        
+            _mediator = mediator;
             _mongoDbContext = mongoDbContext;
             _studentCollection = _mongoDbContext.setCollection<Student>(schoolDatabaseSettings.Value.StudentCollectionName);
           
@@ -25,7 +32,7 @@ namespace Persistance.Repositories;
        student.Id = ObjectId.GenerateNewId().ToString();
         await _studentCollection.InsertOneAsync(student);
 
-        OnNewStudentAdded(student.FirstName, student.LastName, student.Major);
+       await _mediator.Send(new OnNewStudentAddedCommand(student.FirstName, student.LastName,student.Major));
 
         return student;
 
@@ -59,14 +66,5 @@ namespace Persistance.Repositories;
     }
 
 
-    #region  events
-
-    public event EventHandler<OnNewStudentAddedEventArgs>? OnNewStudentAddedHandler;
-    protected virtual void OnNewStudentAdded(string firstName, string lastName,string major)
-    {
-        OnNewStudentAddedHandler?.Invoke(this, new OnNewStudentAddedEventArgs(firstName, lastName, major));
-    }
-
-    #endregion
 }
 

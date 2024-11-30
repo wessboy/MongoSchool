@@ -16,6 +16,5 @@ namespace Persistance.Interfaces;
       Task<Student?> GetByName(string firstName, string lastName);
       Task<ReplaceOneResult> Update(string id,Student student);
      
-      event EventHandler<OnNewStudentAddedEventArgs>? OnNewStudentAddedHandler;
     }
 
