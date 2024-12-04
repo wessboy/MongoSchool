@@ -47,8 +47,7 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
     options.ServicesStopConcurrently = true;
 });*/
 
-//builder.Services.AddSingleton<IMongoDbChangeStreamService,MongoDbChangeStreamService>();
-//builder.Services.AddHostedService<DatabseEventStreamWorker>();
+
 
 var app = builder.Build();
 
@@ -73,6 +72,7 @@ app.UseWhen(context => context.Request.Path.ToString() == "api/student/add",buil
         var administrationService = builder.ApplicationServices.GetRequiredService<IAdminstrationService>();
 
         administrationService.SubscribeToEvent(studentService);
+
         await next();
 
         administrationService.UnsbscribeFromEvent(studentService);
