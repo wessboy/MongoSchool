@@ -1,10 +1,10 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Persistance.DataBaseConfig;
 using Persistance.Entities;
+using Persistance.Events;
 using Persistance.Interfaces;
 using Persistance.ValueObjects;
 
@@ -14,14 +14,12 @@ namespace Persistance.Repositories;
     {
     private readonly IMongoCollection<Student> _studentCollection;
     private readonly MongoDbContext _mongoDbContext;
-    private readonly IMediator _mediator;
+    public WeakEvent<OnNewStudentAddedArgs> OnNewStudentAdded { get; set; }  = new(); 
         public StudentRepository(
             IOptions<SchoolDatabaseSettings> schoolDatabaseSettings,
-            MongoDbContext mongoDbContext,
-            IMediator mediator
+            MongoDbContext mongoDbContext
             )
         {
-            _mediator = mediator;
             _mongoDbContext = mongoDbContext;
             _studentCollection = _mongoDbContext.setCollection<Student>(schoolDatabaseSettings.Value.StudentCollectionName);
           
@@ -32,7 +30,6 @@ namespace Persistance.Repositories;
        student.Id = ObjectId.GenerateNewId().ToString();
         await _studentCollection.InsertOneAsync(student);
 
-       await _mediator.Send(new OnNewStudentAddedCommand(student.FirstName, student.LastName,student.Major));
 
         return student;
 

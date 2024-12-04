@@ -4,7 +4,9 @@
 namespace Persistance.Interfaces;
     public interface IAdminstrationService
     {
-     public void OnNewStudentAdded(OnNewStudentAddedCommand newStudent);
-   
-    }
+     void OnNewStudentAdded(Object sender, OnNewStudentAddedArgs newStudent);
+     void SubscribeToEvent(IStudentService studentService);
+    void UnsbscribeFromEvent(IStudentService studentService);
+    
+     }
 

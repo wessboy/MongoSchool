@@ -39,7 +39,6 @@ builder.Services.AddScoped<MongoDbContext>(serviceProvider =>
     return new MongoDbContext(database);    
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<OnNewStudentAddedCommand>());
 
 //hosting
 /*builder.Services.Configure<HostOptions>(options =>
@@ -64,6 +63,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 //custom middelware
+
+app.UseWhen(context => context.Request.Path.ToString() == "api/student/add" ,builder =>
+{
+    builder.Use(async (context, next) =>
+    {
+         var studentService = builder.ApplicationServices.GetRequiredService<IStudentService>();
+        var administrationService = builder.ApplicationServices.GetRequiredService<IAdminstrationService>();
+
+        administrationService.SubscribeToEvent(studentService);
+        await next();
+
+        administrationService.UnsbscribeFromEvent(studentService);
+    });
+});
 
 app.MapControllers();
 

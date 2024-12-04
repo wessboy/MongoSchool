@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using Persistance.Entities;
+using Persistance.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Persistance.Interfaces;
       Task<Student?> GetById(string id);
       Task<Student?> GetByName(string firstName, string lastName);
       Task<ReplaceOneResult> Update(string id,Student student);
-     
-    }
+
+      public WeakEvent<OnNewStudentAddedArgs> OnNewStudentAdded { get; set; }
+
+}
 
