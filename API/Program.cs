@@ -68,7 +68,8 @@ app.UseWhen(context => context.Request.Path.ToString() == "api/student/add",buil
 {
     builder.Use(async (context, next) =>
     {
-         var studentService = builder.ApplicationServices.GetRequiredService<IStudentService>();
+        using var scope = builder.ApplicationServices.CreateScope();
+         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         var administrationService = builder.ApplicationServices.GetRequiredService<IAdminstrationService>();
 
         administrationService.SubscribeToEvent(studentService);
