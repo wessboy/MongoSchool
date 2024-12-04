@@ -64,7 +64,7 @@ app.UseAuthorization();
 
 //custom middelware
 
-app.UseWhen(context => context.Request.Path.ToString() == "api/student/add" ,builder =>
+app.UseWhen(context => context.Request.Path.ToString() == "api/student/add",builder =>
 {
     builder.Use(async (context, next) =>
     {
