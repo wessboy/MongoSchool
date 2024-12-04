@@ -50,6 +50,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<On
 
 //builder.Services.AddSingleton<IMongoDbChangeStreamService,MongoDbChangeStreamService>();
 //builder.Services.AddHostedService<DatabseEventStreamWorker>();
+
 var app = builder.Build();
 
 
